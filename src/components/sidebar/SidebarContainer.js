@@ -1,5 +1,5 @@
 import { Constants, useMeeting } from "@videosdk.live/react-sdk";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import useIsMobile from "../../hooks/useIsMobile";
 import useIsTab from "../../hooks/useIsTab";
 import ECommercePanel from "../../interactive-live-streaming/components/ECommercePanel";
@@ -13,6 +13,7 @@ import { ParticipantPanel } from "./ParticipantPanel";
 import { Dialog, Transition } from "@headlessui/react";
 import { useMediaQuery } from "react-responsive";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
+import { ModeContext } from "../../App";
 
 const SideBarTabView = ({
   height,
@@ -26,7 +27,7 @@ const SideBarTabView = ({
 }) => {
   const { participants } = useMeeting();
   const { sideBarMode, draftPolls, polls } = useMeetingAppContext();
-
+  const {ModeOfEntry, setModeOfEntry} = useContext(ModeContext)
   return (
     <div
       className="bg-gray-800"
@@ -103,7 +104,8 @@ const SideBarTabView = ({
             ) : sideBarMode === "POLLS" && meetingMode === "VIEWER" ? (
               <SubmitPollList {...{ panelHeight }} />
             ) : sideBarMode === "CREATE_POLL" ? (
-              <CreatePoll {...{ panelHeight }} />
+              ModeOfEntry &&  <CreatePoll {...{ panelHeight }} />
+             
             ) : sideBarMode === "ECOMMERCE" ? (
               <ECommercePanel {...{ panelHeight }} />
             ) : null}

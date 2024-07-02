@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { Constants, MeetingProvider } from "@videosdk.live/react-sdk";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
 import { JoiningScreen } from "./components/screens/JoiningScreen";
 import { ILSContainer } from "./interactive-live-streaming/ILSContainer";
 import { MeetingAppProvider } from "./MeetingAppContextDef";
-
+export  const  ModeContext = createContext()
 const App = () => {
   const [token, setToken] = useState("");
   const [meetingId, setMeetingId] = useState("");
@@ -20,7 +20,9 @@ const App = () => {
   const [selectMicDeviceId, setSelectMicDeviceId] = useState(selectedMic.id);
   const [isMeetingStarted, setMeetingStarted] = useState(false);
   const [isMeetingLeft, setIsMeetingLeft] = useState(false);
+ 
 
+const [ModeOfEntry, setModeOfEntry] = useState(false)
   const isMobile = window.matchMedia(
     "only screen and (max-width: 768px)"
   ).matches;
@@ -34,7 +36,7 @@ const App = () => {
   }, [isMobile]);
 
   return (
-    <>
+    <ModeContext.Provider value={{ModeOfEntry,setModeOfEntry}}>
       {isMeetingStarted ? (
         <MeetingAppProvider
           selectedMic={selectedMic}
@@ -101,7 +103,7 @@ const App = () => {
           setMeetingMode={setMeetingMode}
         />
       )}
-    </>
+    </ModeContext.Provider>
   );
 };
 

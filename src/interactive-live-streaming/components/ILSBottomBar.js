@@ -4,13 +4,14 @@ import {
   useMeeting,
   usePubSub,
 } from "@videosdk.live/react-sdk";
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import React, { Fragment, useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   ClipboardIcon,
   CheckIcon,
   ChevronDownIcon,
   DotsHorizontalIcon,
 } from "@heroicons/react/outline";
+
 import recordingBlink from "../../static/animations/recording-blink.json";
 import liveHLS from "../../static/animations/live-hls.json";
 import useIsRecording from "../../hooks/useIsRecording";
@@ -37,6 +38,7 @@ import { sideBarModes } from "../../utils/common";
 import ECommerceIcon from "../../icons/Bottombar/ECommerceIcon";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
+import { ModeContext } from "../../App";
 
 export function ILSBottomBar({
   bottomBarHeight,
@@ -48,6 +50,7 @@ export function ILSBottomBar({
   meetingMode,
 }) {
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
+  const {ModeOfEntry, setModeOfEntry} =useContext(ModeContext)
   const RaiseHandBTN = ({ isMobile, isTab }) => {
     const { publish } = usePubSub("RAISE_HAND");
     const RaiseHand = () => {
@@ -552,7 +555,7 @@ export function ILSBottomBar({
   };
 
   const PollBTN = ({ isMobile, isTab }) => {
-    return isMobile || isTab ? (
+    return  (isMobile || isTab ? (
       <MobileIconButton
         id="poll-btn"
         tooltipTitle={"Poll"}
@@ -564,8 +567,8 @@ export function ILSBottomBar({
             s === sideBarModes.POLLS ? null : sideBarModes.POLLS
           );
         }}
-      />
-    ) : (
+      /> )
+     : (
       <OutlinedButton
         Icon={PollIcon}
         onClick={() => {
@@ -576,7 +579,7 @@ export function ILSBottomBar({
         isFocused={sideBarMode === sideBarModes.POLLS}
         tooltip={"Poll"}
       />
-    );
+    ))
   };
 
   const HLSBTN = ({ isMobile, isTab }) => {
@@ -872,7 +875,7 @@ export function ILSBottomBar({
     otherFeatures.push({ icon: BottomBarButtonTypes.SCREEN_SHARE });
     otherFeatures.push({ icon: BottomBarButtonTypes.HLS });
   }
-
+  
   return isMobile || isTab ? (
     <div
       className="flex items-center justify-center"
@@ -931,9 +934,9 @@ export function ILSBottomBar({
                             }`}
                           >
                             {icon === BottomBarButtonTypes.RAISE_HAND ? (
-                              <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
-                            ) : icon === BottomBarButtonTypes.SCREEN_SHARE ? (
-                              <ScreenShareBTN
+                            !ModeContext &&  <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
+                            ) : ModeContext && icon === BottomBarButtonTypes.SCREEN_SHARE ? (
+                               <ScreenShareBTN
                                 isMobile={isMobile}
                                 isTab={isTab}
                               />
@@ -953,7 +956,7 @@ export function ILSBottomBar({
                             ) : icon === BottomBarButtonTypes.HLS ? (
                               <HLSBTN isMobile={isMobile} isTab={isTab} />
                             ) : icon === BottomBarButtonTypes.POLL ? (
-                              <PollBTN isMobile={isMobile} isTab={isTab} />
+                             ModeContext ? (<PollBTN isMobile={isMobile} isTab={isTab} />):(<></>)
                             ) : icon === BottomBarButtonTypes.REACTION &&
                               meetingMode === Constants.modes.VIEWER ? (
                               <ReactionBTN isMobile={isMobile} isTab={isTab} />
@@ -1020,17 +1023,18 @@ export function ILSBottomBar({
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         {meetingMode === Constants.modes.CONFERENCE && (
-          <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
+        ModeContext &&  <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
         )}
-        <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
+       {!ModeContext && <RaiseHandBTN isMobile={isMobile} isTab={isTab} />}
         {meetingMode === Constants.modes.VIEWER && (
           <ReactionBTN isMobile={isMobile} isTab={isTab} />
         )}
         {meetingMode === Constants.modes.CONFERENCE && (
-          <>
+         (ModeOfEntry && <>
+
             <MicBTN />
             <WebCamBTN />
-          </>
+          </>)
         )}
         <LeaveBTN />
       </div>
@@ -1038,7 +1042,7 @@ export function ILSBottomBar({
         {meetingMode === Constants.modes.VIEWER && (
           <ECommerceBTN isMobile={isMobile} isTab={isTab} />
         )}
-        <PollBTN isMobile={isMobile} isTab={isTab} />
+      { ModeContext && <PollBTN isMobile={isMobile} isTab={isTab} />}
         <ChatBTN isMobile={isMobile} isTab={isTab} />
         <ParticipantsBTN isMobile={isMobile} isTab={isTab} />
       </div>

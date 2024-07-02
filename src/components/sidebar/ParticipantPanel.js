@@ -1,5 +1,5 @@
 import { useMeeting, useParticipant } from "@videosdk.live/react-sdk";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import useIsHls from "../../hooks/useIsHls";
 import MicOffIcon from "../../icons/ParticipantTabPanel/MicOffIcon";
 import MicOnIcon from "../../icons/ParticipantTabPanel/MicOnIcon";
@@ -9,6 +9,7 @@ import VideoCamOnIcon from "../../icons/ParticipantTabPanel/VideoCamOnIcon";
 import ToggleModeContainer from "../../interactive-live-streaming/components/ToggleModeListner";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
 import { nameTructed } from "../../utils/helper";
+import { ModeContext } from "../../App";
 
 function ParticipantListItem({ participantId, raisedHand }) {
   const { micOn, webcamOn, displayName, isLocal, mode } =
@@ -53,6 +54,7 @@ function ParticipantListItem({ participantId, raisedHand }) {
 }
 
 export function ParticipantPanel({ panelHeight }) {
+  const {ModeOfEntry, setModeOfEntry} = useContext(ModeContext)
   const { raisedHandsParticipants } = useMeetingAppContext();
   const mMeeting = useMeeting();
   const participants = mMeeting.participants;
@@ -106,15 +108,17 @@ export function ParticipantPanel({ panelHeight }) {
         className="flex flex-col flex-1"
         style={{ height: panelHeight - 100 }}
       >
-        {[...participants.keys()].map((participantId, index) => {
+        {ModeOfEntry ? (<> {[...participants.keys()].map((participantId, index) => {
           const { raisedHand, participantId: peerId } = part[index];
           return (
+            
             <ParticipantListItem
               participantId={peerId}
               raisedHand={raisedHand}
             />
           );
-        })}
+        })}</>):(<div><p style={{color:'white', padding:10}}>Only teachers can access this list!</p></div>)}
+       
       </div>
     </div>
   );

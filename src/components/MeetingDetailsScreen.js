@@ -1,6 +1,7 @@
 import { CheckIcon, ClipboardIcon } from "@heroicons/react/outline";
 import { Constants } from "@videosdk.live/react-sdk";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ModeContext } from "../App";
 
 export function MeetingDetailsScreen({
   onClickJoin,
@@ -18,7 +19,7 @@ export function MeetingDetailsScreen({
   const [isCopied, setIsCopied] = useState(false);
   const [iscreateMeetingClicked, setIscreateMeetingClicked] = useState(false);
   const [isJoinMeetingClicked, setIsJoinMeetingClicked] = useState(false);
-
+  const {ModeOfEntry, setModeOfEntry} =useContext(ModeContext)
   return (
     <div
       className={`flex flex-1 flex-col justify-center w-full md:p-[6px] sm:p-1 p-1.5`}
@@ -102,25 +103,28 @@ export function MeetingDetailsScreen({
         <div className="w-full md:mt-0 mt-4 flex flex-col">
           <div className="flex items-center justify-center flex-col w-full">
             <button
-              className="w-full bg-purple-350 text-white px-2 py-3 rounded-xl"
+              className="w-full  text-white px-2 py-3 rounded-xl"
+              style={{backgroundColor:"orange"}}
               onClick={async (e) => {
                 const studioCode = await _handleOnCreateMeeting();
                 setStudioCode(studioCode);
                 setIscreateMeetingClicked(true);
                 setMeetingMode(Constants.modes.CONFERENCE);
+                setModeOfEntry(true)
               }}
             >
-              Create a meeting
+              Start a live class
             </button>
 
             <button
-              className="w-full bg-purple-350 text-white px-2 py-3 mt-5 rounded-xl"
+              className="w-full bg-orange-250 text-white px-2 py-3 mt-5 rounded-xl"
               onClick={async (e) => {
                 setIsJoinMeetingClicked(true);
                 setMeetingMode(Constants.modes.CONFERENCE);
+                setModeOfEntry(false)
               }}
             >
-              Join as a Host
+              Join as a Participant
             </button>
             <button
               className="w-full bg-gray-650 text-white px-2 py-3 rounded-xl mt-5"
@@ -129,7 +133,7 @@ export function MeetingDetailsScreen({
                 setMeetingMode(Constants.modes.VIEWER);
               }}
             >
-              Join as a Viewer
+              Join as a Student
             </button>
           </div>
         </div>
