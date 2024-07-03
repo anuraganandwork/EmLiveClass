@@ -1,5 +1,5 @@
 import { useMeeting, useParticipant } from "@videosdk.live/react-sdk";
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import useIsHls from "../../hooks/useIsHls";
 import MicOffIcon from "../../icons/ParticipantTabPanel/MicOffIcon";
 import MicOnIcon from "../../icons/ParticipantTabPanel/MicOnIcon";
@@ -10,15 +10,23 @@ import ToggleModeContainer from "../../interactive-live-streaming/components/Tog
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
 import { nameTructed } from "../../utils/helper";
 import { ModeContext } from "../../App";
+import ParticipantAddHostIcon from "../../icons/ParticipantTabPanel/ParticipantAddHostIcon";
+import { DotsVerticalIcon } from "@heroicons/react/outline";
+function ParticipantListItem({ participantId, raisedHand, removeParticipant }) {
+  const { micOn, webcamOn, displayName, isLocal, mode,remove, enableMic, disableMic, enableWebcam,disableWebcam , participant,onStreamDisabled, } =
+    useParticipant(participantId, );
 
-function ParticipantListItem({ participantId, raisedHand }) {
-  const { micOn, webcamOn, displayName, isLocal, mode } =
-    useParticipant(participantId);
+    const {onMicRequested} = useMeeting()
   const isHls = useIsHls();
+console.log("Partui", participant);
+useEffect(() => {
+  console.log("micOn state changed:", micOn);
+}, [micOn]);
 
   return (
-    <div className="mt-2 m-2 p-2 bg-gray-700 rounded-lg mb-0">
-      <div className="flex flex-1 items-center justify-center relative">
+    <div  className="mt-2 m-2 p-2 bg-gray-700 rounded-lg mb-0 hover:bg-gray-400"
+      style={{}}>
+      <div className="flex flex-1 items-center justify-center relative" >
         <div
           style={{
             color: "#212032",
@@ -29,7 +37,7 @@ function ParticipantListItem({ participantId, raisedHand }) {
           {displayName?.charAt(0).toUpperCase()}
         </div>
         <div className="ml-2 mr-1 flex flex-1">
-          <p className="text-base text-white overflow-hidden whitespace-pre-wrap overflow-ellipsis">
+          <p className="text-base text-white overflow-hidden whitespace-pre-wrap overflow-ellipsis" onClick={()=>{}}>
             {isLocal ? "You" : nameTructed(displayName, 15)}
           </p>
         </div>
@@ -38,10 +46,40 @@ function ParticipantListItem({ participantId, raisedHand }) {
             <RaiseHand fillcolor={"#fff"} />
           </div>
         )}
-        <div className="m-1 p-1">{micOn ? <MicOnIcon /> : <MicOffIcon />}</div>
-        <div className="m-1 p-1">
-          {webcamOn ? <VideoCamOnIcon /> : <VideoCamOffIcon />}
-        </div>
+        <div className="m-1 p-1" onClick={() => {
+  console.log("Current mic state:", micOn);
+  if (micOn) {
+    console.log("Attempting to disable mic");
+    disableMic();
+  } else {
+    console.log("Attempting to enable mic");
+    enableMic();
+  }
+  console.log("Mic action attempted, current state:", micOn);
+}}>{micOn ? <MicOnIcon /> : <MicOffIcon />}</div>
+        <div className="m-1 p-1" 
+  onClick={() => {
+    onMicRequested(participantId)
+    webcamOn ? disableWebcam() : enableWebcam();
+    console.log("Webcam clicked, new state:", !webcamOn);
+  }}>
+  {webcamOn ? <VideoCamOnIcon /> : <VideoCamOffIcon />}
+</div>
+
+        <div onClick={()=>{if(!isLocal){
+      const answer = window.confirm("Do youn want to remove this student?")
+      if(answer){remove()}
+      else{
+
+      }
+      
+      
+    }}} > <DotsVerticalIcon
+                className={` "text-opacity-70"}
+              h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80`}
+                aria-hidden="true"
+              /></div>
+       
         {isHls && (
           <ToggleModeContainer
             participantId={participantId}
@@ -54,6 +92,7 @@ function ParticipantListItem({ participantId, raisedHand }) {
 }
 
 export function ParticipantPanel({ panelHeight }) {
+  const { leave } = useMeeting();
   const {ModeOfEntry, setModeOfEntry} = useContext(ModeContext)
   const { raisedHandsParticipants } = useMeetingAppContext();
   const mMeeting = useMeeting();
@@ -115,6 +154,9 @@ export function ParticipantPanel({ panelHeight }) {
             <ParticipantListItem
               participantId={peerId}
               raisedHand={raisedHand}
+              removeParticipant={()=>{
+                //leave()
+              }}
             />
           );
         })}</>):(<div><p style={{color:'white', padding:10}}>Only teachers can access this list!</p></div>)}

@@ -23,6 +23,7 @@ ReactDOM.render(
       draggable
       pauseOnHover
       theme="light"
+      
     />
     <App />
   </>,

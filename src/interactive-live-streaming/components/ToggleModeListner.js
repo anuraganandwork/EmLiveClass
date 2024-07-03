@@ -66,6 +66,7 @@ const ToggleModeContainer = ({ participantId, participantMode }) => {
                       })
                     );
                     close();
+                    console.log("Removed clicked ");
                   }}
                   className=""
                 >

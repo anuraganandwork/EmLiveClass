@@ -955,8 +955,8 @@ export function ILSBottomBar({
                               />
                             ) : icon === BottomBarButtonTypes.HLS ? (
                               <HLSBTN isMobile={isMobile} isTab={isTab} />
-                            ) : icon === BottomBarButtonTypes.POLL ? (
-                             ModeContext ? (<PollBTN isMobile={isMobile} isTab={isTab} />):(<></>)
+                            ) : ModeContext ? (icon === BottomBarButtonTypes.POLL ? (
+                           <PollBTN isMobile={isMobile} isTab={isTab} /> ): (<></>)
                             ) : icon === BottomBarButtonTypes.REACTION &&
                               meetingMode === Constants.modes.VIEWER ? (
                               <ReactionBTN isMobile={isMobile} isTab={isTab} />
@@ -1023,9 +1023,9 @@ export function ILSBottomBar({
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
         {meetingMode === Constants.modes.CONFERENCE && (
-        ModeContext &&  <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
+        ModeOfEntry &&  <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
         )}
-       {!ModeContext && <RaiseHandBTN isMobile={isMobile} isTab={isTab} />}
+       {!ModeOfEntry && <RaiseHandBTN isMobile={isMobile} isTab={isTab} />}
         {meetingMode === Constants.modes.VIEWER && (
           <ReactionBTN isMobile={isMobile} isTab={isTab} />
         )}
@@ -1042,7 +1042,7 @@ export function ILSBottomBar({
         {meetingMode === Constants.modes.VIEWER && (
           <ECommerceBTN isMobile={isMobile} isTab={isTab} />
         )}
-      { ModeContext && <PollBTN isMobile={isMobile} isTab={isTab} />}
+       {ModeOfEntry && <PollBTN isMobile={isMobile} isTab={isTab} />}
         <ChatBTN isMobile={isMobile} isTab={isTab} />
         <ParticipantsBTN isMobile={isMobile} isTab={isTab} />
       </div>
