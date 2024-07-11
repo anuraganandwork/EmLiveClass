@@ -474,7 +474,8 @@ export function JoiningScreen({
                     meetingMode={meetingMode}
                     onClickStartMeeting={onClickStartMeeting}
                     onClickJoin={async (id) => {
-                      const token = await getToken();
+                     // const token = await getToken();
+                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1ZjM2NGZhMS1hNzIxLTRhOTUtODM4NS0yZWRlYTE0NTkzZDAiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMDY3NzQzNCwiZXhwIjoxNzIwNjg0NjM0fQ.YZeRgy5YtSoMIr5CumhOh4BObOCGhM4n9Q2BY6aywjg"
                       const valid = await validateMeeting({
                         roomId: id,
                         token,
@@ -492,11 +493,13 @@ export function JoiningScreen({
                       } else alert("Invalid Meeting Id");
                     }}
                     _handleOnCreateMeeting={async () => {
-                      const token = await getToken();
+                      //const token = await getToken();
+                    const token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1ZjM2NGZhMS1hNzIxLTRhOTUtODM4NS0yZWRlYTE0NTkzZDAiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMDY3NzQzNCwiZXhwIjoxNzIwNjg0NjM0fQ.YZeRgy5YtSoMIr5CumhOh4BObOCGhM4n9Q2BY6aywjg"
                       const _meetingId = await createMeeting({ token });
                       setToken(token);
                       setMeetingId(_meetingId);
                       setParticipantName("");
+                      console.log("Meeting id is :",_meetingId);
                       return _meetingId;
                     }}
                   />

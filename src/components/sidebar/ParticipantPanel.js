@@ -1,5 +1,5 @@
 import { useMeeting, useParticipant } from "@videosdk.live/react-sdk";
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import useIsHls from "../../hooks/useIsHls";
 import MicOffIcon from "../../icons/ParticipantTabPanel/MicOffIcon";
 import MicOnIcon from "../../icons/ParticipantTabPanel/MicOnIcon";
@@ -12,18 +12,143 @@ import { nameTructed } from "../../utils/helper";
 import { ModeContext } from "../../App";
 import ParticipantAddHostIcon from "../../icons/ParticipantTabPanel/ParticipantAddHostIcon";
 import { DotsVerticalIcon } from "@heroicons/react/outline";
-function ParticipantListItem({ participantId, raisedHand, removeParticipant }) {
-  const { micOn, webcamOn, displayName, isLocal, mode,remove, enableMic, disableMic, enableWebcam,disableWebcam , participant,onStreamDisabled, } =
-    useParticipant(participantId, );
 
-    const {onMicRequested} = useMeeting()
+import { LeaveScreen } from "../screens/LeaveScreen";
+
+// const getDefaultMediaTracks = async ({ mic, webcam, firstTime, setAudioTrack, setSelectedMic, setVideoTrack,setSelectedWebcam }) => {
+  
+//   if (mic) {
+//     try {
+//       const audioConstraints = {
+//         audio: true,
+//       };
+
+//       const stream = await navigator.mediaDevices.getUserMedia(
+//         audioConstraints
+//       );
+//       const audioTracks = stream.getAudioTracks();
+
+//       const audioTrack = audioTracks.length ? audioTracks[0] : null;
+
+//       setAudioTrack(audioTrack);
+//       if (firstTime) {
+//         setSelectedMic({
+//           id: audioTrack?.getSettings()?.deviceId,
+//         });
+//       }
+//     } catch (error) {
+//       console.log("Failed to access microphone", error);
+//     }
+   
+//   }
+
+//   if (webcam) {
+//     const videoConstraints = {
+//       video: {
+//         width: 1280,
+//         height: 720,
+//       },
+//     };
+
+//     const stream = await navigator.mediaDevices.getUserMedia(
+//       videoConstraints
+//     );
+//     const videoTracks = stream.getVideoTracks();
+
+//     const videoTrack = videoTracks.length ? videoTracks[0] : null;
+//     setVideoTrack(videoTrack);
+//     if (firstTime) {
+//       setSelectedWebcam({
+//         id: videoTrack?.getSettings()?.deviceId,
+//       });
+//     }
+//   }
+// };
+export function ParticipantListItem({ participantId, raisedHand, removeParticipant }) {
+  
+  const [videoTrack, setVideoTrack] = useState(null);
+  const [audioTrack, setAudioTrack] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [removeStudent, setRemoveParticipant] = useState(false)
+  const {ModeOfEntry, setModeOfEntry} =useContext(ModeContext)
+  
+// const mMeetingRef = useRef()
+// const mmMeeting = useMeeting()
+// useEffect(() => {
+//   mMeetingRef.current = mmMeeting;
+// }, [mmMeeting]);
+
+  const { micOn, webcamOn, displayName, isLocal, mode, remove,  disableMic, disableWebcam, participant, enableWebcam, enableMic   } = useParticipant(participantId);
+  console.log("Participant object:", participant);
+  // const abcWeb = mMeetingRef.current?.disableWebcam
+
+
+  useEffect(() => {
+    console.log("webcamOn state changed:", webcamOn);
+  }, [webcamOn]);
+  const {  toggleWebcam} = useMeeting({
+  // onWebcamRequested: ({ accept, reject, participantId }) => {
+  //   // callback function to accept the request
+  //   accept();
+
+  //   // callback function to reject the request
+  //   reject();
+  // },
+  
+
+  
+});
+const handleWebcamRequest = ({ participantId, accept, reject }) => {
+  // You can show a confirmation dialog to the user here
+  const userAccepted = window.confirm(`${participantId} is requesting to turn on your webcam. Do you accept?`);
+  
+  if (userAccepted) {
+    accept();
+  } else {
+    reject();
+  }
+};
+const { meetingId, meeting, localParticipant , onParticipantJoined, } = useMeeting({
+  onMeetingJoined : ()=>{console.log("onMeetingJoined");},
+  onMeetingLeft : ()=>{},
+  onParticipantJoined : ()=>{console.log(" onParticipantJoined", participant);},
+  onParticipantLeft : ()=>{},
+  onSpeakerChanged : ()=>{},
+  onPresenterChanged : ()=>{},
+  onRecordingStarted : ()=>{},
+  onRecordingStopped : ()=>{},
+  onWebcamRequested:handleWebcamRequest
+  
+  
+});
+// onParticipantJoined()
+// const disableParticipantWebcam = (participantId) => {
+//   const participant = participants?.find((p) => p.id === participantId);
+//   if (participant) {
+//     participant.disableWebcam();
+//   }
+// }
+
+
+
+const turnOffCamera = async () => {
+  try {
+    
+    await disableWebcam();
+    console.log("Attempted to turn off camera");
+  } catch (err) {
+    console.error("Error turning off camera:", err);
+  }
+};
+    //const {onMicRequested} = useMeeting()
   const isHls = useIsHls();
-console.log("Partui", participant);
-useEffect(() => {
-  console.log("micOn state changed:", micOn);
-}, [micOn]);
+// console.log("Partui", participant);
+// useEffect(() => {
+//   console.log("micOn state changed:", micOn);
+// }, [micOn]);
 
   return (
+    removeStudent? (<LeaveScreen setIsMeetingLeft={setRemoveParticipant} />):(
     <div  className="mt-2 m-2 p-2 bg-gray-700 rounded-lg mb-0 hover:bg-gray-400"
       style={{}}>
       <div className="flex flex-1 items-center justify-center relative" >
@@ -48,27 +173,42 @@ useEffect(() => {
         )}
         <div className="m-1 p-1" onClick={() => {
   console.log("Current mic state:", micOn);
-  if (micOn) {
-    console.log("Attempting to disable mic");
-    disableMic();
-  } else {
-    console.log("Attempting to enable mic");
-    enableMic();
-  }
+  // if (micOn) {
+  //   console.log("Attempting to disable mic");
+  //   disableMic();
+  // } else {
+  //   console.log("Attempting to enable mic");
+   
+  // }
+
+  //{micOn ? disableMic() : onMicRequested(participantId,()=>{"Accepted mic request "}, ()=>{console.log("Rejected mic request");}) }
+ micOn?  disableMic() : enableMic()
   console.log("Mic action attempted, current state:", micOn);
 }}>{micOn ? <MicOnIcon /> : <MicOffIcon />}</div>
-        <div className="m-1 p-1" 
-  onClick={() => {
-    onMicRequested(participantId)
-    webcamOn ? disableWebcam() : enableWebcam();
-    console.log("Webcam clicked, new state:", !webcamOn);
-  }}>
-  {webcamOn ? <VideoCamOnIcon /> : <VideoCamOffIcon />}
+
+
+  <div className="m-1 p-1" 
+    onClick={async () => {
+      const answer = window.confirm("Do you want to disable webCam ?")
+      if(answer){
+        await turnOffCamera();
+        console.log("Webcam clicked, new state:", !webcamOn);
+      }
+    }}
+  
+  
+  >
+   {webcamOn ? <VideoCamOnIcon /> : <VideoCamOffIcon />} 
+  
 </div>
 
         <div onClick={()=>{if(!isLocal){
-      const answer = window.confirm("Do youn want to remove this student?")
-      if(answer){remove()}
+      const answer = window.confirm("Do you want to remove this student?")
+      if(answer){
+        remove()
+        setRemoveParticipant(true)
+      //  
+      }
       else{
 
       }
@@ -79,6 +219,23 @@ useEffect(() => {
               h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80`}
                 aria-hidden="true"
               /></div>
+              </div>
+
+<div onClick={()=>{
+   const answer = window.confirm("Do you want to make this student co-host?")
+   if(answer){
+    enableWebcam()
+ }
+else{
+  
+}
+
+
+}} > <DotsVerticalIcon
+        className={` "text-opacity-70"}
+      h-5 w-5 text-white transition duration-150 ease-in-out group-hover:text-opacity-80`}
+        aria-hidden="true"
+      /></div>
        
         {isHls && (
           <ToggleModeContainer
@@ -87,7 +244,7 @@ useEffect(() => {
           />
         )}
       </div>
-    </div>
+    )
   );
 }
 
@@ -139,10 +296,11 @@ export function ParticipantPanel({ panelHeight }) {
   );
 
   return (
+   
     <div
       className={`flex w-full flex-col bg-gray-750 overflow-y-auto `}
       style={{ height: panelHeight }}
-    >
+     >
       <div
         className="flex flex-col flex-1"
         style={{ height: panelHeight - 100 }}

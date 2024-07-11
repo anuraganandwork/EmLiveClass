@@ -934,8 +934,8 @@ export function ILSBottomBar({
                             }`}
                           >
                             {icon === BottomBarButtonTypes.RAISE_HAND ? (
-                            !ModeContext &&  <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
-                            ) : ModeContext && icon === BottomBarButtonTypes.SCREEN_SHARE ? (
+                            !ModeOfEntry &&  <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
+                            ) : ModeOfEntry && icon === BottomBarButtonTypes.SCREEN_SHARE ? (
                                <ScreenShareBTN
                                 isMobile={isMobile}
                                 isTab={isTab}
@@ -1020,8 +1020,9 @@ export function ILSBottomBar({
   ) : (
     <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidden">
       <MeetingIdCopyBTN />
-
+      {console.log("MMMMMM",ModeOfEntry)}
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
+      {console.log("MMMMMMFFFFF",ModeOfEntry)}
         {meetingMode === Constants.modes.CONFERENCE && (
         ModeOfEntry &&  <ScreenShareBTN isMobile={isMobile} isTab={isTab} />
         )}
@@ -1035,6 +1036,7 @@ export function ILSBottomBar({
             <MicBTN />
             <WebCamBTN />
           </>)
+
         )}
         <LeaveBTN />
       </div>

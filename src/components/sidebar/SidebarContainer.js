@@ -60,7 +60,7 @@ const SideBarTabView = ({
                 }}
               >
                 <p className="text-base text-white font-bold">
-                  {sideBarMode === "PARTICIPANTS"
+                  {sideBarMode === "PARTICIPANTS" && !ModeOfEntry
                     ? `${
                         sideBarMode.charAt(0).toUpperCase() +
                           sideBarMode.slice(1).toLowerCase() || ""
@@ -74,7 +74,7 @@ const SideBarTabView = ({
                             ? `(${polls?.length || draftPolls?.length})`
                             : ""
                         }`
-                      : meetingMode === Constants.modes.VIEWER
+                      : meetingMode === Constants.modes.CONFERENCE && ModeOfEntry
                       ? `Polls ${polls?.length ? `(${polls?.length})` : ""}`
                       : "Create a poll"
                     : sideBarMode === sideBarModes.ECOMMERCE
@@ -95,16 +95,16 @@ const SideBarTabView = ({
               <ParticipantPanel panelHeight={panelHeight} />
             ) : sideBarMode === "CHAT" ? (
               <ChatPanel panelHeight={panelHeight} />
-            ) : sideBarMode === "POLLS" && meetingMode !== "VIEWER" ? (
+            ) : sideBarMode === "POLLS" && meetingMode !== "PARTICIPANTS" && ModeOfEntry? (
               polls.length === 0 && draftPolls.length === 0 ? (
                 <CreatePoll {...{ panelHeight }} />
               ) : (
                 <PollList {...{ panelHeight }} />
               )
-            ) : sideBarMode === "POLLS" && meetingMode === "VIEWER" ? (
+            ) : sideBarMode === "POLLS" && meetingMode !== "PARTICIPANTS" && ! ModeOfEntry ? (
               <SubmitPollList {...{ panelHeight }} />
             ) : sideBarMode === "CREATE_POLL" ? (
-              ModeOfEntry &&  <CreatePoll {...{ panelHeight }} />
+               <CreatePoll {...{ panelHeight }} />
              
             ) : sideBarMode === "ECOMMERCE" ? (
               <ECommercePanel {...{ panelHeight }} />
@@ -164,7 +164,7 @@ export function SidebarConatiner({
           className="relative"
           style={{ zIndex: 9999 }}
           onClose={handleClose}
-        >
+         >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
