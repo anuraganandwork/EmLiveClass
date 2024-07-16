@@ -11,6 +11,7 @@ import WebcamOffIcon from "../../icons/WebcamOffIcon";
 import WebcamOnIcon from "../../icons/Bottombar/WebcamOnIcon";
 import MicOffIcon from "../../icons/MicOffIcon";
 import MicOnIcon from "../../icons/Bottombar/MicOnIcon";
+import { token } from "../../keys";
 
 export function JoiningScreen({
   participantName,
@@ -476,14 +477,14 @@ export function JoiningScreen({
                     onClickJoin={async (id) => {
                      // const token = await getToken();
                      // changes made to solve expired token
-                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwNzc1NGVkNC02Mzk4LTRiYTAtYTczYy03ZjJlNzkyZWZlZmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMTEwODk1OSwiZXhwIjoxNzIxMTQ0OTU5fQ.-tNLk2QEfwvEQbxN7BOTDn8aT3i89dUtKDPSriOkXVg"
+                     const _token= token
                       const valid = await validateMeeting({
                         roomId: id,
                         token,
                       });
 
                       if (valid) {
-                        setToken(token);
+                        setToken(_token);
                         setMeetingId(id);
                         if (videoTrack) {
                           videoTrack.stop();
@@ -495,9 +496,9 @@ export function JoiningScreen({
                     }}
                     _handleOnCreateMeeting={async () => {
                       //const token = await getToken();
-                    const token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwNzc1NGVkNC02Mzk4LTRiYTAtYTczYy03ZjJlNzkyZWZlZmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMTEwODk1OSwiZXhwIjoxNzIxMTQ0OTU5fQ.-tNLk2QEfwvEQbxN7BOTDn8aT3i89dUtKDPSriOkXVg"
-                      const _meetingId = await createMeeting({ token });
-                      setToken(token);
+                    const _token= token
+                      const _meetingId = await createMeeting({ _token });
+                      setToken(_token);
                       setMeetingId(_meetingId);
                       setParticipantName("");
                       console.log("Meeting id is :",_meetingId);

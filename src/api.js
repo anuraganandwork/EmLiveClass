@@ -1,10 +1,13 @@
+import { token } from "./keys";
 
 
 
 
 const API_BASE_URL = "https://api.videosdk.live";
 // changes made to solve expired token
-const VIDEOSDK_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwNzc1NGVkNC02Mzk4LTRiYTAtYTczYy03ZjJlNzkyZWZlZmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMTAzOTc4NSwiZXhwIjoxNzIxMDc1Nzg1fQ.a58xAhwLxcimsgGvXazdfcupBKskwPQaVuroGFqdRIE"
+
+const _token = token
+const VIDEOSDK_TOKEN = _token
 const API_AUTH_URL = process.env.REACT_APP_AUTH_URL;
 export const getToken = async () => {
   if (VIDEOSDK_TOKEN && API_AUTH_URL) {
