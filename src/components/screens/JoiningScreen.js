@@ -475,7 +475,8 @@ export function JoiningScreen({
                     onClickStartMeeting={onClickStartMeeting}
                     onClickJoin={async (id) => {
                      // const token = await getToken();
-                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1ZjM2NGZhMS1hNzIxLTRhOTUtODM4NS0yZWRlYTE0NTkzZDAiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMDY3NzQzNCwiZXhwIjoxNzIwNjg0NjM0fQ.YZeRgy5YtSoMIr5CumhOh4BObOCGhM4n9Q2BY6aywjg"
+                     // changes made to solve expired token
+                     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwNzc1NGVkNC02Mzk4LTRiYTAtYTczYy03ZjJlNzkyZWZlZmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMTEwODk1OSwiZXhwIjoxNzIxMTQ0OTU5fQ.-tNLk2QEfwvEQbxN7BOTDn8aT3i89dUtKDPSriOkXVg"
                       const valid = await validateMeeting({
                         roomId: id,
                         token,
@@ -494,7 +495,7 @@ export function JoiningScreen({
                     }}
                     _handleOnCreateMeeting={async () => {
                       //const token = await getToken();
-                    const token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1ZjM2NGZhMS1hNzIxLTRhOTUtODM4NS0yZWRlYTE0NTkzZDAiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMDY3NzQzNCwiZXhwIjoxNzIwNjg0NjM0fQ.YZeRgy5YtSoMIr5CumhOh4BObOCGhM4n9Q2BY6aywjg"
+                    const token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwNzc1NGVkNC02Mzk4LTRiYTAtYTczYy03ZjJlNzkyZWZlZmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIiwiYWxsb3dfbW9kIl0sImlhdCI6MTcyMTEwODk1OSwiZXhwIjoxNzIxMTQ0OTU5fQ.-tNLk2QEfwvEQbxN7BOTDn8aT3i89dUtKDPSriOkXVg"
                       const _meetingId = await createMeeting({ token });
                       setToken(token);
                       setMeetingId(_meetingId);

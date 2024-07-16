@@ -8,12 +8,12 @@ const port = 3000; // Choose your preferred port
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
-const API_KEY = '5f364fa1-a721-4a95-8385-2edea14593d0';
-const SECRET = '0fdaa6cf77f2040f72f7dfc60ca001f4bdf93b8496daa57537e2c0a4aaecf5a8';
+const API_KEY = '07754ed4-6398-4ba0-a73c-7f2e792efefc';
+const SECRET = 'aecf6df286fa90448131616751e51c4553cc6e90342fdd3c5df856a0483df665';
 
 app.get('/get-token', (req, res) => {
   const options = { 
-    expiresIn: '120m', 
+    expiresIn: '600m', 
     algorithm: 'HS256' 
   };
   
@@ -32,6 +32,7 @@ app.get('/get-token', (req, res) => {
   res.json({ token });
 });
 
-app.listen(port, () => {
+app.listen(port,  () => {
   console.log(`Server running on http://localhost:${port}`);
+ 
 });

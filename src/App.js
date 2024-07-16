@@ -3,11 +3,14 @@ import { Constants, MeetingProvider } from "@videosdk.live/react-sdk";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
 import { JoiningScreen } from "./components/screens/JoiningScreen";
 import { ILSContainer } from "./interactive-live-streaming/ILSContainer";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, BrowserRouter , Link} from 'react-router-dom';
 import { MeetingAppProvider } from "./MeetingAppContextDef";
 import { ParticipantListItem, ParticipantPanel } from "./components/sidebar/ParticipantPanel";
 
+
 import axios from 'axios';
+import reactDom from "react-dom";
+import scheduleALiveClass from "./components/screens/scheduleALiveClass";
 
 export  const  ModeContext = createContext()
 
@@ -49,7 +52,9 @@ const fetchToken = async ()=>{
     const result = await getToken()
      _setToken(result)
 
-    console.log("Success in generating self generated token",result);}
+    console.log("Success in generating self generated token",result
+      );
+      }
     
   catch(e){
     console.log("Error in taking self generating token",e);
@@ -70,6 +75,7 @@ const fetchToken = async ()=>{
   }, [isMobile]);
 
   return (
+    <BrowserRouter>
     <ModeContext.Provider value={{ModeOfEntry,setModeOfEntry}}>
       
       {isMeetingStarted ? (
@@ -139,6 +145,21 @@ const fetchToken = async ()=>{
         />
       )}
     </ModeContext.Provider>
+    <div>
+    <Routes>
+    
+   
+      <Route path="schedule" element={<scheduleALiveClass/>}/>
+      
+      
+    </Routes>
+    <nav>
+          <Link to="schedule">scheduleALiveClass</Link> 
+        </nav>
+
+</div>
+    
+ </BrowserRouter>
   );
 };
 

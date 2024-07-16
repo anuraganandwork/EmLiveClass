@@ -71,6 +71,7 @@ export function ParticipantListItem({ participantId, raisedHand, removeParticipa
   const [participants, setParticipants] = useState([]);
   const [removeStudent, setRemoveParticipant] = useState(false)
   const {ModeOfEntry, setModeOfEntry} =useContext(ModeContext)
+  const [showRequest, setShowRequest] = useState(false)
   
 // const mMeetingRef = useRef()
 // const mmMeeting = useMeeting()
@@ -99,8 +100,8 @@ export function ParticipantListItem({ participantId, raisedHand, removeParticipa
   
 });
 const handleWebcamRequest = ({ participantId, accept, reject }) => {
-  // You can show a confirmation dialog to the user here
-  const userAccepted = window.confirm(`${participantId} is requesting to turn on your webcam. Do you accept?`);
+  
+  const userAccepted = window.confirm(` requesting to turn on your webcam. Do you accept?`);
   
   if (userAccepted) {
     accept();
@@ -118,7 +119,6 @@ const { meetingId, meeting, localParticipant , onParticipantJoined, } = useMeeti
   onRecordingStarted : ()=>{},
   onRecordingStopped : ()=>{},
   onWebcamRequested:handleWebcamRequest
-  
   
 });
 // onParticipantJoined()
@@ -201,6 +201,7 @@ const turnOffCamera = async () => {
    {webcamOn ? <VideoCamOnIcon /> : <VideoCamOffIcon />} 
   
 </div>
+{showRequest && handleWebcamRequest(participantId, ()=>{console.log("acdepted web cam ");}, ()=>{console.log("Rejected webcam");})}
 
         <div onClick={()=>{if(!isLocal){
       const answer = window.confirm("Do you want to remove this student?")
@@ -224,7 +225,13 @@ const turnOffCamera = async () => {
 <div onClick={()=>{
    const answer = window.confirm("Do you want to make this student co-host?")
    if(answer){
+    try{
     enableWebcam()
+    setShowRequest(true)
+    console.log("Enabling the camera");} 
+    catch(e){
+      console.log("Error in enabling the camera");
+    }
  }
 else{
   
