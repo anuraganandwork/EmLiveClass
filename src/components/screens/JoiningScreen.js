@@ -477,14 +477,14 @@ export function JoiningScreen({
                     onClickJoin={async (id) => {
                      // const token = await getToken();
                      // changes made to solve expired token
-                     const _token= token
+                     //const _token= token
                       const valid = await validateMeeting({
                         roomId: id,
                         token,
                       });
 
                       if (valid) {
-                        setToken(_token);
+                        setToken(token);
                         setMeetingId(id);
                         if (videoTrack) {
                           videoTrack.stop();
@@ -496,9 +496,9 @@ export function JoiningScreen({
                     }}
                     _handleOnCreateMeeting={async () => {
                       //const token = await getToken();
-                    const _token= token
-                      const _meetingId = await createMeeting({ _token });
-                      setToken(_token);
+                    //const _token= token
+                      const _meetingId = await createMeeting({ token });
+                      setToken(token);
                       setMeetingId(_meetingId);
                       setParticipantName("");
                       console.log("Meeting id is :",_meetingId);

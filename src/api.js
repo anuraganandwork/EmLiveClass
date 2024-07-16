@@ -6,8 +6,8 @@ import { token } from "./keys";
 const API_BASE_URL = "https://api.videosdk.live";
 // changes made to solve expired token
 
-const _token = token
-const VIDEOSDK_TOKEN = _token
+//const _token = token
+const VIDEOSDK_TOKEN = token
 const API_AUTH_URL = process.env.REACT_APP_AUTH_URL;
 export const getToken = async () => {
   if (VIDEOSDK_TOKEN && API_AUTH_URL) {
