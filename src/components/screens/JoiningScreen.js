@@ -27,6 +27,8 @@ export function JoiningScreen({
   setMicOn,
   setMeetingMode,
   meetingMode,
+  meetingId,
+
 }) {
   const [setting, setSetting] = useState("video");
   const [{ webcams, mics }, setDevices] = useState({
