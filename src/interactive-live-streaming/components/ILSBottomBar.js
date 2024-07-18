@@ -39,6 +39,7 @@ import ECommerceIcon from "../../icons/Bottombar/ECommerceIcon";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
 import { ModeContext } from "../../App";
+import ControlSharing from "../../components/controlSharing";
 
 export function ILSBottomBar({
   bottomBarHeight,
@@ -246,6 +247,7 @@ export function ILSBottomBar({
                             </div>
                           </div>
                         </Popover.Panel>
+                        {/* <ControlSharing isTeacher={true/false} /> */}
                       </Transition>
                     </>
                   )}

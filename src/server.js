@@ -13,7 +13,7 @@ const SECRET = 'aecf6df286fa90448131616751e51c4553cc6e90342fdd3c5df856a0483df665
 
 app.get('/get-token', (req, res) => {
   const options = { 
-    expiresIn: '600m', 
+    expiresIn: '6000m', 
     algorithm: 'HS256' 
   };
   
